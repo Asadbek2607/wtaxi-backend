@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PassengerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PassengerRepository::class)]
@@ -35,6 +37,14 @@ class Passenger
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'passenger', targetEntity: Ride::class)]
+    private Collection $rides;
+
+    public function __construct()
+    {
+        $this->rides = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -121,6 +131,36 @@ class Passenger
     public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): self
     {
         $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ride>
+     */
+    public function getRides(): Collection
+    {
+        return $this->rides;
+    }
+
+    public function addRide(Ride $ride): self
+    {
+        if (!$this->rides->contains($ride)) {
+            $this->rides->add($ride);
+            $ride->setPassenger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRide(Ride $ride): self
+    {
+        if ($this->rides->removeElement($ride)) {
+            // set the owning side to null (unless already changed)
+            if ($ride->getPassenger() === $this) {
+                $ride->setPassenger(null);
+            }
+        }
 
         return $this;
     }

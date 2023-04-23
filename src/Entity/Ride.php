@@ -30,6 +30,10 @@ class Ride
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'rides')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Passenger $passenger = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +95,18 @@ class Ride
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPassenger(): ?Passenger
+    {
+        return $this->passenger;
+    }
+
+    public function setPassenger(?Passenger $passenger): self
+    {
+        $this->passenger = $passenger;
 
         return $this;
     }
