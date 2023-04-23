@@ -6,39 +6,52 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PassengerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PassengerRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups'=> ['passenger:read']],
+    denormalizationContext: ['groups'=>['passenger:write']]
+)]
 class Passenger
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['passenger:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['passenger:read','passenger:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['passenger:read','passenger:write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['passenger:read','passenger:write'])]
     private ?string $phoneNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['passenger:read','passenger:write'])]
     private ?string $password = null;
 
     #[ORM\Column]
+    #[Groups(['passenger:read','passenger:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['passenger:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['passenger:read'])]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
     #[ORM\OneToMany(mappedBy: 'passenger', targetEntity: Ride::class)]
+    #[Groups(['passenger:read'])]
     private Collection $rides;
 
     public function __construct()

@@ -4,34 +4,45 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RideRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RideRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups'=>['ride:read']],
+    denormalizationContext: ['groups'=>['ride:write']]
+)]
 class Ride
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['ride:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ride:read','ride:write'])]
     private ?string $pickupLocation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ride:read','ride:write'])]
     private ?string $dropoffLocation = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ride:read','ride:write'])]
     private ?string $fare = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['ride:read','ride:write'])]
     private ?string $status = null;
 
     #[ORM\Column]
+    #[Groups(['ride:read','ride:write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['ride:read', 'ride:write'])]
     private ?Passenger $passenger = null;
 
     public function getId(): ?int
