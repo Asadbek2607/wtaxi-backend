@@ -17,15 +17,15 @@ final class Version20230421215718 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE booking (
-            id INT AUTO_INCREMENT NOT NULL, 
-            created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', 
-            PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB'
-        );
+        $this->addSql('CREATE TABLE "booking" (
+            "id" INT AUTO_INCREMENT NOT NULL, 
+            "created_at" DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', 
+            PRIMARY KEY(id))
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE `booking`');
+        $this->addSql('DROP TABLE "booking"');
     }
 }

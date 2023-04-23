@@ -16,20 +16,20 @@ final class Version20230421211857 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('CREATE TABLE `vehicle` (
-            `id` INT AUTO_INCREMENT NOT NULL, 
-            `make` VARCHAR(255) NOT NULL, 
-            `model` VARCHAR(255) NOT NULL, 
-            `color` VARCHAR(255) NOT NULL, 
-            `number_of_seats` INT NOT NULL, 
-            `license_plate_number` VARCHAR(255) NOT NULL, 
-            `year` INT NOT NULL, status VARCHAR(255) NOT NULL, 
-            PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB'
-        );
+        $this->addSql('CREATE TABLE "vehicle" (
+            "id" INT AUTO_INCREMENT NOT NULL, 
+            "make" VARCHAR(255) NOT NULL, 
+            "model" VARCHAR(255) NOT NULL, 
+            "color" VARCHAR(255) NOT NULL, 
+            "number_of_seats" INT NOT NULL, 
+            "license_plate_number" VARCHAR(255) NOT NULL, 
+            "year" INT NOT NULL, status VARCHAR(255) NOT NULL, 
+            PRIMARY KEY(id)) 
+        ');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('DROP TABLE `vehicle`');
+        $this->addSql('DROP TABLE "vehicle"');
     }
 }
