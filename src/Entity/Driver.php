@@ -16,7 +16,7 @@ class Driver
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
     private ?string $email = null;
@@ -26,9 +26,6 @@ class Driver
 
     #[ORM\Column(length: 255)]
     private ?string $license = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $vehicle = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -45,19 +42,23 @@ class Driver
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $vehicle = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getfirstName(): ?string
     {
-        return $this->name;
+        return $this->firstName;
     }
 
-    public function setName(string $name): self
+    public function setfirstName(string $firstName): self
     {
-        $this->name = $name;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -94,18 +95,6 @@ class Driver
     public function setLicense(string $license): self
     {
         $this->license = $license;
-
-        return $this;
-    }
-
-    public function getVehicle(): ?string
-    {
-        return $this->vehicle;
-    }
-
-    public function setVehicle(string $vehicle): self
-    {
-        $this->vehicle = $vehicle;
 
         return $this;
     }
@@ -166,6 +155,18 @@ class Driver
     public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): self
     {
         $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(Vehicle $vehicle): self
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }
