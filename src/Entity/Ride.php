@@ -45,6 +45,14 @@ class Ride
     #[Groups(['ride:read', 'ride:write'])]
     private ?Passenger $passenger = null;
 
+    #[ORM\ManyToOne(inversedBy: 'rides')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Driver $driver = null;
+
+    #[ORM\ManyToOne(inversedBy: 'rides')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $vehicle = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,6 +126,30 @@ class Ride
     public function setPassenger(?Passenger $passenger): self
     {
         $this->passenger = $passenger;
+
+        return $this;
+    }
+
+    public function getDriver(): ?Driver
+    {
+        return $this->driver;
+    }
+
+    public function setDriver(?Driver $driver): self
+    {
+        $this->driver = $driver;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(?Vehicle $vehicle): self
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }
