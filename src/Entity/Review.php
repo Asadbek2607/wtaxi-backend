@@ -21,6 +21,14 @@ class Review
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $feedback = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Passenger $passenger = null;
+
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Ride $ride = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +54,30 @@ class Review
     public function setFeedback(?string $feedback): self
     {
         $this->feedback = $feedback;
+
+        return $this;
+    }
+
+    public function getPassenger(): ?Passenger
+    {
+        return $this->passenger;
+    }
+
+    public function setPassenger(?Passenger $passenger): self
+    {
+        $this->passenger = $passenger;
+
+        return $this;
+    }
+
+    public function getRide(): ?Ride
+    {
+        return $this->ride;
+    }
+
+    public function setRide(?Ride $ride): self
+    {
+        $this->ride = $ride;
 
         return $this;
     }

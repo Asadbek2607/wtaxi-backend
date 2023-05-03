@@ -57,10 +57,14 @@ class Passenger
     #[ORM\OneToMany(mappedBy: 'passenger', targetEntity: Booking::class)]
     private Collection $bookings;
 
+    #[ORM\OneToMany(mappedBy: 'passenger', targetEntity: Review::class)]
+    private Collection $reviews;
+
     public function __construct()
     {
         $this->rides = new ArrayCollection();
         $this->bookings = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +210,36 @@ class Passenger
             // set the owning side to null (unless already changed)
             if ($booking->getPassenger() === $this) {
                 $booking->setPassenger(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setPassenger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getPassenger() === $this) {
+                $review->setPassenger(null);
             }
         }
 
