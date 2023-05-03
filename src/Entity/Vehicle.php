@@ -36,6 +36,10 @@ class Vehicle
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Driver $driver = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +125,18 @@ class Vehicle
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDriver(): ?Driver
+    {
+        return $this->driver;
+    }
+
+    public function setDriver(Driver $driver): self
+    {
+        $this->driver = $driver;
 
         return $this;
     }
