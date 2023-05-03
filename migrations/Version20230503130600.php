@@ -11,7 +11,7 @@ final class Version20230503130600 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Review table relationships';
     }
 
     public function up(Schema $schema): void

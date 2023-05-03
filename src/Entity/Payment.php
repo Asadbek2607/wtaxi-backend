@@ -28,6 +28,9 @@ class Payment
     #[ORM\JoinColumn(nullable: false)]
     private ?Booking $booking = null;
 
+    #[ORM\OneToOne(mappedBy: 'payment', cascade: ['persist', 'remove'])]
+    private ?Transaction $transaction = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -77,6 +80,23 @@ class Payment
     public function setBooking(?Booking $booking): self
     {
         $this->booking = $booking;
+
+        return $this;
+    }
+
+    public function getTransaction(): ?Transaction
+    {
+        return $this->transaction;
+    }
+
+    public function setTransaction(Transaction $transaction): self
+    {
+        // set the owning side of the relation if necessary
+        if ($transaction->getPayment() !== $this) {
+            $transaction->setPayment($this);
+        }
+
+        $this->transaction = $transaction;
 
         return $this;
     }
