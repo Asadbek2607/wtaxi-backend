@@ -24,6 +24,10 @@ class Payment
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'payment')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Booking $booking = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -61,6 +65,18 @@ class Payment
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getBooking(): ?Booking
+    {
+        return $this->booking;
+    }
+
+    public function setBooking(?Booking $booking): self
+    {
+        $this->booking = $booking;
 
         return $this;
     }

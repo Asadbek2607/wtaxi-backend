@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\RideRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -52,6 +54,14 @@ class Ride
     #[ORM\ManyToOne(inversedBy: 'rides')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Vehicle $vehicle = null;
+
+    #[ORM\OneToMany(mappedBy: 'ride', targetEntity: Booking::class)]
+    private Collection $bookings;
+
+    public function __construct()
+    {
+        $this->bookings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -150,6 +160,36 @@ class Ride
     public function setVehicle(?Vehicle $vehicle): self
     {
         $this->vehicle = $vehicle;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Booking>
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings->add($booking);
+            $booking->setRide($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->removeElement($booking)) {
+            // set the owning side to null (unless already changed)
+            if ($booking->getRide() === $this) {
+                $booking->setRide(null);
+            }
+        }
 
         return $this;
     }
