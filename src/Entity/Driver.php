@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DriverRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource]
 class Driver
 {
@@ -138,11 +139,10 @@ class Driver
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    #[ORM\PrePersist]
+    public function setCreatedAt(): void
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
@@ -150,11 +150,10 @@ class Driver
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getLastLoginAt(): ?\DateTimeImmutable
@@ -162,11 +161,11 @@ class Driver
         return $this->lastLoginAt;
     }
 
-    public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): self
+    #[ORM\PreUpdate]
+    #[ORM\PrePersist]
+    public function setLastLoginAt(): void
     {
-        $this->lastLoginAt = $lastLoginAt;
-
-        return $this;
+        $this->lastLoginAt = new \DateTimeImmutable();
     }
 
     public function getVehicle(): ?Vehicle
