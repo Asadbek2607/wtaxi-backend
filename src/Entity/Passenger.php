@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PassengerRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ApiResource(
     normalizationContext: ['groups'=> ['passenger:read']],
     denormalizationContext: ['groups'=>['passenger:write']]
@@ -39,7 +40,7 @@ class Passenger
     private ?string $password = null;
 
     #[ORM\Column]
-    #[Groups(['passenger:read','passenger:write'])]
+    #[Groups(['passenger:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
@@ -125,11 +126,10 @@ class Passenger
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    #[ORM\PrePersist]
+    public function setCreatedAt(): void
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getUpdatedAt(): ?\DateTimeImmutable
@@ -137,11 +137,10 @@ class Passenger
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getLastLoginAt(): ?\DateTimeImmutable
@@ -149,11 +148,11 @@ class Passenger
         return $this->lastLoginAt;
     }
 
-    public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): self
+    #[ORM\PreUpdate]
+    #[ORM\PrePersist]
+    public function setLastLoginAt(): void
     {
-        $this->lastLoginAt = $lastLoginAt;
-
-        return $this;
+        $this->lastLoginAt = new \DateTimeImmutable();
     }
 
     /**
