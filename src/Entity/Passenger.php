@@ -7,6 +7,8 @@ use App\Repository\PassengerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PassengerRepository::class)]
@@ -15,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
     normalizationContext: ['groups'=> ['passenger:read']],
     denormalizationContext: ['groups'=>['passenger:write']]
 )]
-class Passenger
+class Passenger implements PasswordAuthenticatedUserInterface, UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -243,5 +245,20 @@ class Passenger
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return (string)$this->getId();
     }
 }
