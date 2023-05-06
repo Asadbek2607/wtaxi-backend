@@ -6,13 +6,33 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DriverRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use App\Controller\Driver\DriverCreateAction;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: DriverRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(
+    operations:[
+        new GetCollection(),
+        new Post(
+            uriTemplate: '/drivers/my',
+            controller: DriverCreateAction::class,
+            name: 'create-driver',
+        ),
+        new Get(),
+        new Put(),
+        new Delete(),
+
+
+    ],
+)]
 class Driver implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
